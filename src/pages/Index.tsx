@@ -1,6 +1,6 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Instagram, Youtube } from "lucide-react";
+import { Instagram, Youtube, Camera, Upload, X } from "lucide-react";
 
 const BACKGROUNDS = [
   { label: "Cream", value: "#F5F2E9" },
@@ -20,8 +20,88 @@ export default function Index() {
   const [bg, setBg] = useState(BACKGROUNDS[0].value);
   const [step, setStep] = useState<"upload" | "customize" | "result">("upload");
   const [processing, setProcessing] = useState(false);
+
+  // Camera state
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [cameraSlot, setCameraSlot] = useState<number | null>(null);
+  const [cameraError, setCameraError] = useState("");
+  const [countdown, setCountdown] = useState<number | null>(null);
+
   const fileRefs = useRef<(HTMLInputElement | null)[]>([]);
   const stripRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Start camera
+  const openCamera = useCallback(async (slotIndex: number) => {
+    setCameraSlot(slotIndex);
+    setCameraError("");
+    setCameraOpen(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch {
+      setCameraError("Could not access camera. Please allow camera permission.");
+    }
+  }, []);
+
+  // Stop camera stream
+  const closeCamera = useCallback(() => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    setCameraOpen(false);
+    setCameraSlot(null);
+    setCountdown(null);
+    setCameraError("");
+  }, []);
+
+  // Capture photo from video
+  const capturePhoto = useCallback(() => {
+    if (!videoRef.current || cameraSlot === null) return;
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    // Mirror horizontally (selfie mode)
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0);
+    const dataUrl = canvas.toDataURL("image/jpeg");
+    setPhotos((prev) => {
+      const next = [...prev];
+      next[cameraSlot] = dataUrl;
+      return next;
+    });
+    closeCamera();
+  }, [cameraSlot, closeCamera]);
+
+  // Countdown then capture
+  const startCountdown = useCallback(() => {
+    setCountdown(3);
+    let count = 3;
+    countdownRef.current = setInterval(() => {
+      count -= 1;
+      if (count === 0) {
+        clearInterval(countdownRef.current!);
+        setCountdown(null);
+        capturePhoto();
+      } else {
+        setCountdown(count);
+      }
+    }, 1000);
+  }, [capturePhoto]);
+
+  // Cleanup on unmount
+  useEffect(() => () => closeCamera(), [closeCamera]);
 
   const handleFileChange = useCallback((index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -44,10 +124,7 @@ export default function Index() {
     if (step === "upload" && canContinue) setStep("customize");
     else if (step === "customize") {
       setProcessing(true);
-      setTimeout(() => {
-        setProcessing(false);
-        setStep("result");
-      }, 1800);
+      setTimeout(() => { setProcessing(false); setStep("result"); }, 1800);
     }
   };
 
@@ -67,9 +144,8 @@ export default function Index() {
 
   const handleShare = async () => {
     if (navigator.share) {
-      try {
-        await navigator.share({ title: "My Vintage Photobooth Strip", url: window.location.href });
-      } catch { /* cancelled */ }
+      try { await navigator.share({ title: "My Vintage Photobooth Strip", url: window.location.href }); }
+      catch { /* cancelled */ }
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert("Link copied to clipboard!");
@@ -93,6 +169,51 @@ export default function Index() {
         </div>
       </nav>
 
+      {/* Camera Modal */}
+      {cameraOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex flex-col items-center justify-center gap-4 px-4">
+          <div className="relative w-full max-w-sm rounded-sm overflow-hidden border-2 border-[#d4c9b0]">
+            {cameraError ? (
+              <div className="bg-[#F5F2E9] p-8 text-center font-playfair text-[#70421A]/70">{cameraError}</div>
+            ) : (
+              <>
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full"
+                  style={{ transform: "scaleX(-1)" }}
+                />
+                {/* Countdown overlay */}
+                {countdown !== null && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <span className="font-vintage text-white text-8xl">{countdown}</span>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          <div className="flex items-center gap-4">
+            {!cameraError && (
+              <button
+                onClick={startCountdown}
+                disabled={countdown !== null}
+                className="btn-vintage flex items-center gap-2 disabled:opacity-50 disabled:hover:scale-100"
+              >
+                <Camera className="w-4 h-4" />
+                {countdown !== null ? `Taking photo in ${countdown}…` : "Take Photo"}
+              </button>
+            )}
+            <button onClick={closeCamera} className="btn-vintage-outline flex items-center gap-2">
+              <X className="w-4 h-4" /> Cancel
+            </button>
+          </div>
+          <p className="font-playfair text-xs text-white/60">Photo {(cameraSlot ?? 0) + 1} of {NUM_SLOTS}</p>
+        </div>
+      )}
+
       {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 gap-10">
         <h1 className="font-vintage text-3xl md:text-4xl text-[#70421A] text-center leading-relaxed">
@@ -103,34 +224,44 @@ export default function Index() {
         {step === "upload" && (
           <div className="flex flex-col items-center gap-8 w-full max-w-lg">
             <p className="font-playfair text-[#70421A]/80 text-center text-sm">
-              Upload {NUM_SLOTS} photos to create your vintage strip
+              Take or upload {NUM_SLOTS} photos to create your vintage strip
             </p>
 
             <div className="grid grid-cols-2 gap-3 w-full">
               {Array(NUM_SLOTS).fill(null).map((_, i) => (
-                <div
-                  key={i}
-                  className="photo-slot rounded-sm border border-[#d4c9b0] cursor-pointer"
-                  onClick={() => fileRefs.current[i]?.click()}
-                >
-                  {photos[i] ? (
-                    <>
-                      <img src={photos[i]!} alt={`Photo ${i + 1}`} className="w-full h-full object-cover retro-filter" />
-                      <div className="replace-overlay font-playfair tracking-widest text-xs uppercase">Replace</div>
-                    </>
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-[#70421A]/40">
-                      <span className="font-vintage text-3xl">{i + 1}</span>
-                      <span className="font-playfair text-xs tracking-wider">Click to upload</span>
-                    </div>
-                  )}
-                  <input
-                    ref={(el) => { fileRefs.current[i] = el; }}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => handleFileChange(i, e)}
-                  />
+                <div key={i} className="flex flex-col gap-1">
+                  <div
+                    className="photo-slot rounded-sm border border-[#d4c9b0] cursor-pointer"
+                    onClick={() => fileRefs.current[i]?.click()}
+                  >
+                    {photos[i] ? (
+                      <>
+                        <img src={photos[i]!} alt={`Photo ${i + 1}`} className="w-full h-full object-cover retro-filter" />
+                        <div className="replace-overlay font-playfair tracking-widest text-xs uppercase">Replace</div>
+                      </>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-[#70421A]/40">
+                        <span className="font-vintage text-3xl">{i + 1}</span>
+                        <Upload className="w-4 h-4" />
+                        <span className="font-playfair text-xs tracking-wider">Upload</span>
+                      </div>
+                    )}
+                    <input
+                      ref={(el) => { fileRefs.current[i] = el; }}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleFileChange(i, e)}
+                    />
+                  </div>
+                  {/* Camera button per slot */}
+                  <button
+                    onClick={() => openCamera(i)}
+                    className="flex items-center justify-center gap-1.5 text-xs font-playfair text-[#70421A]/60 hover:text-[#70421A] transition-colors py-1 border border-[#d4c9b0] rounded-sm hover:border-[#70421A]"
+                  >
+                    <Camera className="w-3 h-3" />
+                    {photos[i] ? "Retake" : "Use Camera"}
+                  </button>
                 </div>
               ))}
             </div>
@@ -151,7 +282,6 @@ export default function Index() {
         {/* Step: Customize */}
         {step === "customize" && (
           <div className="flex flex-col md:flex-row items-start gap-10 w-full max-w-3xl">
-            {/* Preview strip */}
             <div
               ref={stripRef}
               className="flex flex-col gap-1 p-3 rounded-sm shadow-lg mx-auto"
@@ -162,15 +292,10 @@ export default function Index() {
                   {src && <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover retro-filter" />}
                 </div>
               ))}
-              {showDate && (
-                <p className="font-dancing text-center text-xs text-[#70421A]/70 mt-1 pt-1">{today}</p>
-              )}
-              {note && (
-                <p className="font-dancing text-center text-sm text-[#70421A] pb-1">{note}</p>
-              )}
+              {showDate && <p className="font-dancing text-center text-xs text-[#70421A]/70 mt-1 pt-1">{today}</p>}
+              {note && <p className="font-dancing text-center text-sm text-[#70421A] pb-1">{note}</p>}
             </div>
 
-            {/* Controls */}
             <div className="flex flex-col gap-6 flex-1">
               <div>
                 <p className="font-playfair font-semibold text-[#70421A] mb-3 text-sm tracking-wide uppercase">Background</p>
@@ -241,12 +366,8 @@ export default function Index() {
                   {src && <img src={src} alt={`Photo ${i + 1}`} className="w-full h-full object-cover retro-filter" />}
                 </div>
               ))}
-              {showDate && (
-                <p className="font-dancing text-center text-xs text-[#70421A]/70 mt-1 pt-1">{today}</p>
-              )}
-              {note && (
-                <p className="font-dancing text-center text-sm text-[#70421A] pb-1">{note}</p>
-              )}
+              {showDate && <p className="font-dancing text-center text-xs text-[#70421A]/70 mt-1 pt-1">{today}</p>}
+              {note && <p className="font-dancing text-center text-sm text-[#70421A] pb-1">{note}</p>}
             </div>
 
             <div className="flex gap-3">
