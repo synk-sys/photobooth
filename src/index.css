@@ -1,0 +1,220 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    --background: 40 20% 99%;
+    --foreground: 20 10% 12%;
+
+    --card: 40 15% 100%;
+    --card-foreground: 20 10% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 10% 12%;
+
+    --primary: 187 65% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 187 25% 96%;
+    --secondary-foreground: 20 10% 12%;
+
+    --muted: 40 15% 95%;
+    --muted-foreground: 20 8% 42%;
+
+    --accent: 0 75% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 15% 90%;
+    --input: 40 15% 90%;
+    --ring: 187 65% 35%;
+
+    --radius: 0.375rem;
+
+    /* Luxury real estate tokens */
+    --hero-gradient: linear-gradient(135deg, hsl(187 65% 35% / 0.9), hsl(190 60% 28% / 0.95));
+    --card-shadow: 0 2px 16px -4px hsl(20 10% 15% / 0.06);
+    --card-shadow-hover: 0 8px 30px -8px hsl(20 10% 15% / 0.12);
+    --shadow-luxury: 0 20px 60px -15px hsl(20 10% 15% / 0.1);
+    --shadow-soft: 0 1px 3px 0 hsl(20 10% 15% / 0.04);
+
+    --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  h1 {
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .card-shadow {
+    box-shadow: var(--card-shadow);
+  }
+
+  .card-shadow-hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .shadow-luxury {
+    box-shadow: var(--shadow-luxury);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  /* Luxury section divider */
+  .section-divider {
+    @apply relative;
+  }
+  .section-divider::before {
+    content: '';
+    @apply absolute top-0 left-1/2 -translate-x-1/2 w-px h-20;
+    background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.2), transparent);
+  }
+
+  /* Article luxury styling */
+  .article-hero {
+    @apply relative overflow-hidden;
+    background: linear-gradient(
+      180deg,
+      hsl(var(--primary) / 0.04) 0%,
+      hsl(var(--background)) 100%
+    );
+  }
+
+  .article-hero::before {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
+  }
+
+  .article-accent-line {
+    @apply w-12 h-px mx-auto;
+    background: hsl(var(--primary));
+  }
+
+  .article-card {
+    @apply border border-border/50 bg-card transition-all duration-300;
+    box-shadow: var(--card-shadow);
+  }
+
+  .article-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    border-color: hsl(var(--primary) / 0.2);
+  }
+
+  .article-cta {
+    @apply relative overflow-hidden;
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0.06) 0%,
+      hsl(var(--primary) / 0.02) 100%
+    );
+    border: 1px solid hsl(var(--primary) / 0.12);
+  }
+}
+
+@media print {
+  /* Hide non-essential elements */
+  nav, footer, .print\\:hidden,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* Reset layout to single column */
+  .print\\:block { display: block !important; }
+  .print\\:grid-cols-1 { grid-template-columns: 1fr !important; }
+
+  /* Property detail print layout */
+  .print-property-header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 12pt;
+    margin-bottom: 12pt;
+  }
+
+  .print-property-image {
+    max-height: 350px;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  /* Force backgrounds for detail rows */
+  .print-detail-row:nth-child(even) {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Page setup */
+  @page {
+    margin: 0.75in;
+    size: letter;
+  }
+
+  a[href]::after {
+    content: none !important;
+  }
+}
