@@ -5,7 +5,7 @@ export default function Privacy() {
     <div className="min-h-screen bg-[#F5F2E9] flex flex-col film-grain">
       <nav className="flex items-center justify-between px-6 py-4 border-b border-[#d4c9b0]">
         <Link to="/" className="font-vintage text-lg text-[#70421A] leading-tight">
-          Little Vintage<br />Photobooth
+          Digital Photobooth
         </Link>
         <div className="flex items-center gap-6 text-sm font-playfair text-[#70421A]">
           <Link to="/" className="hover:opacity-70 transition-opacity">Home</Link>
@@ -55,7 +55,7 @@ export default function Privacy() {
       </main>
 
       <footer className="border-t border-[#d4c9b0] px-6 py-4 text-center text-xs font-playfair text-[#70421A]/50">
-        © {new Date().getFullYear()} Little Vintage Photobooth
+        © {new Date().getFullYear()} Digital Photobooth
       </footer>
     </div>
   );

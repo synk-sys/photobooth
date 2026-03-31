@@ -5,7 +5,7 @@ export default function About() {
     <div className="min-h-screen bg-[#F5F2E9] flex flex-col film-grain">
       <nav className="flex items-center justify-between px-6 py-4 border-b border-[#d4c9b0]">
         <Link to="/" className="font-vintage text-lg text-[#70421A] leading-tight">
-          Little Vintage<br />Photobooth
+          Digital Photobooth
         </Link>
         <div className="flex items-center gap-6 text-sm font-playfair text-[#70421A]">
           <Link to="/" className="hover:opacity-70 transition-opacity">Home</Link>
@@ -18,7 +18,7 @@ export default function About() {
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 max-w-xl mx-auto text-center gap-8">
         <h1 className="font-vintage text-3xl text-[#70421A]">About</h1>
         <p className="font-playfair text-[#70421A]/80 leading-relaxed">
-          I built Little Vintage Photobooth for fun — a playful, nostalgic tool that lets you
+          I built Digital Photobooth for fun — a playful, nostalgic tool that lets you
           create beautiful retro photo strips right in your browser.
         </p>
         <p className="font-playfair text-[#70421A]/80 leading-relaxed">
@@ -39,7 +39,7 @@ export default function About() {
       </main>
 
       <footer className="border-t border-[#d4c9b0] px-6 py-4 text-center text-xs font-playfair text-[#70421A]/50">
-        © {new Date().getFullYear()} Little Vintage Photobooth
+        © {new Date().getFullYear()} Digital Photobooth
       </footer>
     </div>
   );

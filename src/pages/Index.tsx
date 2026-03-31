@@ -199,7 +199,7 @@ export default function Index() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-[#d4c9b0]">
         <button onClick={resetAll} className="font-vintage text-lg text-[#70421A] leading-tight text-left hover:opacity-70 transition-opacity">
-          Little Vintage<br />Photobooth
+          Digital Photobooth
         </button>
         <div className="hidden sm:flex items-center gap-6 text-sm font-playfair text-[#70421A]">
           <Link to="/" className="hover:opacity-70 transition-opacity">Home</Link>
@@ -244,7 +244,7 @@ export default function Index() {
       {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-12 gap-10">
         <h1 className="font-vintage text-3xl md:text-4xl text-[#70421A] text-center leading-relaxed">
-          Little Vintage Photobooth
+          Digital Photobooth
         </h1>
 
         {/* ── Welcome ── */}
@@ -446,7 +446,7 @@ export default function Index() {
             <Youtube className="w-4 h-4" />
           </a>
         </div>
-        <span className="text-xs">© {new Date().getFullYear()} Little Vintage Photobooth</span>
+        <span className="text-xs">© {new Date().getFullYear()} Digital Photobooth</span>
       </footer>
     </div>
   );
