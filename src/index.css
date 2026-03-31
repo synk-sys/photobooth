@@ -2,219 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Dancing+Script:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 @layer base {
   :root {
-    --background: 40 20% 99%;
-    --foreground: 20 10% 12%;
+    --background: 45 30% 94%;
+    --foreground: 28 60% 18%;
 
-    --card: 40 15% 100%;
-    --card-foreground: 20 10% 12%;
+    --card: 45 30% 97%;
+    --card-foreground: 28 60% 18%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 10% 12%;
+    --popover: 45 30% 97%;
+    --popover-foreground: 28 60% 18%;
 
-    --primary: 187 65% 35%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 28 70% 26%;
+    --primary-foreground: 45 30% 97%;
 
-    --secondary: 187 25% 96%;
-    --secondary-foreground: 20 10% 12%;
+    --secondary: 45 25% 88%;
+    --secondary-foreground: 28 60% 18%;
 
-    --muted: 40 15% 95%;
-    --muted-foreground: 20 8% 42%;
+    --muted: 45 20% 88%;
+    --muted-foreground: 28 30% 45%;
 
-    --accent: 0 75% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 25% 85%;
+    --accent-foreground: 28 60% 18%;
 
     --destructive: 0 75% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 90%;
-    --input: 40 15% 90%;
-    --ring: 187 65% 35%;
+    --border: 35 20% 80%;
+    --input: 35 20% 80%;
+    --ring: 28 70% 26%;
 
-    --radius: 0.375rem;
-
-    /* Luxury real estate tokens */
-    --hero-gradient: linear-gradient(135deg, hsl(187 65% 35% / 0.9), hsl(190 60% 28% / 0.95));
-    --card-shadow: 0 2px 16px -4px hsl(20 10% 15% / 0.06);
-    --card-shadow-hover: 0 8px 30px -8px hsl(20 10% 15% / 0.12);
-    --shadow-luxury: 0 20px 60px -15px hsl(20 10% 15% / 0.1);
-    --shadow-soft: 0 1px 3px 0 hsl(20 10% 15% / 0.04);
-
-    --font-display: 'Cormorant Garamond', 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --radius: 0.5rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
 
-  html {
-    font-size: 16px;
-  }
-
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    letter-spacing: 0.01em;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    line-height: 1.15;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-  }
-
-  h1 {
-    letter-spacing: -0.02em;
-  }
-
-  p {
-    font-size: 1rem;
-    line-height: 1.75;
+    @apply bg-[#F5F2E9] text-[#70421A];
+    font-family: 'Playfair Display', serif;
   }
 }
 
-@layer utilities {
-  .font-display {
-    font-family: var(--font-display);
-  }
-
-  .font-body {
-    font-family: var(--font-body);
-  }
-
-  .card-shadow {
-    box-shadow: var(--card-shadow);
-  }
-
-  .card-shadow-hover {
-    box-shadow: var(--card-shadow-hover);
-  }
-
-  .shadow-luxury {
-    box-shadow: var(--shadow-luxury);
-  }
-
-  .shadow-soft {
-    box-shadow: var(--shadow-soft);
-  }
-
-  /* Luxury section divider */
-  .section-divider {
-    @apply relative;
-  }
-  .section-divider::before {
-    content: '';
-    @apply absolute top-0 left-1/2 -translate-x-1/2 w-px h-20;
-    background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.2), transparent);
-  }
-
-  /* Article luxury styling */
-  .article-hero {
-    @apply relative overflow-hidden;
-    background: linear-gradient(
-      180deg,
-      hsl(var(--primary) / 0.04) 0%,
-      hsl(var(--background)) 100%
-    );
-  }
-
-  .article-hero::before {
-    content: '';
-    @apply absolute top-0 left-0 w-full h-px;
-    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
-  }
-
-  .article-accent-line {
-    @apply w-12 h-px mx-auto;
-    background: hsl(var(--primary));
-  }
-
-  .article-card {
-    @apply border border-border/50 bg-card transition-all duration-300;
-    box-shadow: var(--card-shadow);
-  }
-
-  .article-card:hover {
-    box-shadow: var(--card-shadow-hover);
-    border-color: hsl(var(--primary) / 0.2);
-  }
-
-  .article-cta {
-    @apply relative overflow-hidden;
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary) / 0.06) 0%,
-      hsl(var(--primary) / 0.02) 100%
-    );
-    border: 1px solid hsl(var(--primary) / 0.12);
-  }
+/* Film grain overlay */
+.film-grain {
+  position: relative;
+}
+.film-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 10;
+  border-radius: inherit;
 }
 
-@media print {
-  /* Hide non-essential elements */
-  nav, footer, .print\\:hidden,
-  [data-print-hide] {
-    display: none !important;
-  }
+/* Retro filter for photos */
+.retro-filter {
+  filter: sepia(40%) contrast(1.1) brightness(0.95) saturate(0.85);
+}
 
-  body {
-    font-size: 12pt;
-    color: #000 !important;
-    background: #fff !important;
-  }
+/* Vintage button */
+.btn-vintage {
+  @apply bg-[#70421A] text-[#F5F2E9] font-medium px-6 py-2.5 rounded-sm transition-all hover:scale-105 hover:shadow-md active:scale-95;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.05em;
+}
 
-  /* Reset layout to single column */
-  .print\\:block { display: block !important; }
-  .print\\:grid-cols-1 { grid-template-columns: 1fr !important; }
+.btn-vintage-outline {
+  @apply border border-[#70421A] text-[#70421A] font-medium px-6 py-2.5 rounded-sm transition-all hover:scale-105 hover:shadow-md active:scale-95;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.05em;
+}
 
-  /* Property detail print layout */
-  .print-property-header {
-    border-bottom: 2px solid #000;
-    padding-bottom: 12pt;
-    margin-bottom: 12pt;
-  }
+/* Photo slot */
+.photo-slot {
+  @apply relative overflow-hidden cursor-pointer;
+  aspect-ratio: 1;
+  background: #e8e0d0;
+}
 
-  .print-property-image {
-    max-height: 350px;
-    object-fit: cover;
-    width: 100%;
-    border-radius: 4px;
-  }
+.photo-slot:hover .replace-overlay {
+  opacity: 1;
+}
 
-  /* Force backgrounds for detail rows */
-  .print-detail-row:nth-child(even) {
-    background: #f5f5f5 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+.replace-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-200;
+  font-family: 'Playfair Display', serif;
+  color: white;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+}
 
-  /* Page setup */
-  @page {
-    margin: 0.75in;
-    size: letter;
-  }
+/* Vintage title font */
+.font-vintage {
+  font-family: 'Homemade Apple', cursive;
+}
 
-  a[href]::after {
-    content: none !important;
-  }
+.font-dancing {
+  font-family: 'Dancing Script', cursive;
+}
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
 }

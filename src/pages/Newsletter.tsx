@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function About() {
+export default function Newsletter() {
   return (
     <div className="min-h-screen bg-[#F5F2E9] flex flex-col film-grain">
       <nav className="flex items-center justify-between px-6 py-4 border-b border-[#d4c9b0]">
@@ -16,26 +16,27 @@ export default function About() {
       </nav>
 
       <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 max-w-xl mx-auto text-center gap-8">
-        <h1 className="font-vintage text-3xl text-[#70421A]">About</h1>
-        <p className="font-playfair text-[#70421A]/80 leading-relaxed">
-          I built Little Vintage Photobooth for fun — a playful, nostalgic tool that lets you
-          create beautiful retro photo strips right in your browser.
-        </p>
+        <h1 className="font-vintage text-3xl text-[#70421A]">Join the Waitlist</h1>
         <p className="font-playfair text-[#70421A]/80 leading-relaxed">
           Curious how this was made? Join the waitlist and I'll share my creative process
-          step by step. If you love playful, nostalgic design, you'll probably enjoy what I share.
+          step by step — plus other playful, nostalgic design experiments.
         </p>
-        <p className="font-dancing text-xl text-[#70421A]">
-          Follow me for more behind-the-scenes and other cool experiments!
+        <p className="font-dancing text-lg text-[#70421A]">
+          "I built this vintage photobooth for fun, and if you love playful, nostalgic design,
+          you'll probably enjoy what I share."
         </p>
-        <div className="flex gap-4 flex-wrap justify-center">
-          <a href="https://www.instagram.com/meshtimes/" target="_blank" rel="noopener noreferrer" className="btn-vintage text-sm">
-            Instagram @meshtimes
-          </a>
-          <Link to="/newsletter" className="btn-vintage-outline text-sm">
-            Join the waitlist
-          </Link>
-        </div>
+
+        {/* BeHiiv embed */}
+        <iframe
+          src="https://embeds.beehiiv.com/08df6ccd-daa0-4bea-96cf-71cc0b29c74c"
+          data-test-id="beehiiv-embed"
+          width="100%"
+          height="320"
+          frameBorder="0"
+          scrolling="no"
+          style={{ borderRadius: 4, border: "1px solid #d4c9b0", background: "transparent" }}
+          title="Newsletter signup"
+        />
       </main>
 
       <footer className="border-t border-[#d4c9b0] px-6 py-4 text-center text-xs font-playfair text-[#70421A]/50">
